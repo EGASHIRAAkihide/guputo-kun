@@ -75,7 +75,7 @@ export function HomeTemplate() {
         return
       }
   
-      alert("✅ Supabaseに保存しました！")
+      alert("キャリアマップ作成成功しました（beta）")
   
     } catch (e) {
       console.error("❌ 予期せぬエラー:", e)
