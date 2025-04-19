@@ -86,7 +86,12 @@ export function HomeTemplate() {
   return (
     <div>
       <div className="w-full max-w-[1080px] mx-auto my-12">
-        <div className="flex align-middle justify-center">
+        <div className="flex align-center justify-center flex-col text-center">
+          <h1 className="text-2xl font-bold">guputo_kun</h1>
+          <h2 className="text-sm">キャリアマインドマップ自動生成システム</h2>
+        </div>
+
+        <div className="flex align-middle justify-center mt-4">
           <Avatar>
             <AvatarImage src="/guputo-kun.jpg" />
             <AvatarFallback>CN</AvatarFallback>
@@ -101,7 +106,7 @@ export function HomeTemplate() {
               name="username"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Username<span className="text-red-600 font-bold">Required</span></FormLabel>
+                  <FormLabel>名前<span className="text-red-600 font-bold">必須</span></FormLabel>
                   <FormControl>
                     <Input placeholder="Your name" {...field} />
                   </FormControl>
@@ -116,7 +121,7 @@ export function HomeTemplate() {
               name="age"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Age</FormLabel>
+                  <FormLabel>年齢</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} onChange={(e) => field.onChange(+e.target.value)} />
                   </FormControl>
@@ -131,7 +136,7 @@ export function HomeTemplate() {
               name="yearsOfExperience"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Years of Experience</FormLabel>
+                  <FormLabel>経験</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} onChange={(e) => field.onChange(+e.target.value)} />
                   </FormControl>
@@ -142,7 +147,7 @@ export function HomeTemplate() {
 
             {/* Skills */}
             <div>
-              <Label>Skills</Label>
+              <Label>スキル</Label>
               <div className="space-y-2 mt-2">
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex items-center gap-2">
@@ -151,12 +156,12 @@ export function HomeTemplate() {
                       placeholder={`Skill #${index + 1}`}
                     />
                     <Button type="button" variant="destructive" onClick={() => remove(index)}>
-                      Remove
+                      削除
                     </Button>
                   </div>
                 ))}
                 <Button type="button" variant="outline" onClick={() => append({ name: "" })}>
-                  + Add Skill
+                  + 追加
                 </Button>
               </div>
             </div>
@@ -167,7 +172,7 @@ export function HomeTemplate() {
               name="annualSalary"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Annual Salary</FormLabel>
+                  <FormLabel>年収</FormLabel>
                   <FormControl>
                     <Input type="number" {...field} onChange={(e) => field.onChange(+e.target.value)} />
                   </FormControl>
@@ -182,7 +187,7 @@ export function HomeTemplate() {
               name="purpose"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Purpose</FormLabel>
+                  <FormLabel>目的</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-[180px]">
@@ -190,10 +195,10 @@ export function HomeTemplate() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="work_life_balance">Work-Life Balance</SelectItem>
-                      <SelectItem value="earn_more">Earn More</SelectItem>
-                      <SelectItem value="skill_up">Skill Up</SelectItem>
-                      <SelectItem value="management_track">Management / Upstream</SelectItem>
+                      <SelectItem value="work_life_balance">ワークライフバランス</SelectItem>
+                      <SelectItem value="earn_more">稼ぎたい</SelectItem>
+                      <SelectItem value="skill_up">スキルアップ</SelectItem>
+                      <SelectItem value="management_track">上流工程に携わりたい</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -203,7 +208,7 @@ export function HomeTemplate() {
 
             {/* Submit */}
             <Button type="submit" className="w-full">
-              Submit
+              キャリアパスマップを作成する
             </Button>
           </form>
         </Form>
