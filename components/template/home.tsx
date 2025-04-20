@@ -123,7 +123,18 @@ export function HomeTemplate() {
                 <FormItem>
                   <FormLabel>年齢</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} onChange={(e) => field.onChange(+e.target.value)} />
+                    <Input 
+                      type="text"
+                      inputMode="numeric"
+                      {...field}
+                      onChange={(e) => {
+                      const val = e.target.value;
+                        if (/^\d*$/.test(val)) {
+                          field.onChange(val === "" ? undefined : Number(val))
+                        }
+                      }}
+                      pattern="[0-9]*"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -138,7 +149,18 @@ export function HomeTemplate() {
                 <FormItem>
                   <FormLabel>経験</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} onChange={(e) => field.onChange(+e.target.value)} />
+                  <Input 
+                      type="text"
+                      inputMode="numeric"
+                      {...field}
+                      onChange={(e) => {
+                      const val = e.target.value;
+                        if (/^\d*$/.test(val)) {
+                          field.onChange(val === "" ? undefined : Number(val))
+                        }
+                      }}
+                      pattern="[0-9]*"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -174,7 +196,18 @@ export function HomeTemplate() {
                 <FormItem>
                   <FormLabel>年収</FormLabel>
                   <FormControl>
-                    <Input type="number" {...field} onChange={(e) => field.onChange(+e.target.value)} />
+                    <Input 
+                      type="text"
+                      inputMode="numeric"
+                      {...field}
+                      onChange={(e) => {
+                      const val = e.target.value;
+                        if (/^\d*$/.test(val)) {
+                          field.onChange(val === "" ? undefined : Number(val))
+                        }
+                      }}
+                      pattern="[0-9]*"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

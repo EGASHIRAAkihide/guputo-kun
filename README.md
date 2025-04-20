@@ -38,3 +38,11 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ## supabase
 
 https://supabase.com
+
+## production URL
+
+https://guputo-a0vzlm8th-aes-projects.vercel.app
+
+## vercel 
+
+https://vercel.com/aes-projects/guputo-kun/8PNixE1AXqrMgsLhxxTsbiw4u9zw
