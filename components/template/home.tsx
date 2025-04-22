@@ -14,11 +14,13 @@ import { supabase } from "@/lib/supabase"
 const formSchema = z.object({
   username: z.string().min(2).max(50),
   age: z.number().min(18).max(60),
-  yearsOfExperience: z.number(),
-  skills: z.array(z.object({ name: z.string() })),
+  yearsOfExperience: z.number().min(1), // ← 1年以上
+  skills: z
+    .array(z.object({ name: z.string().min(1, "スキル名は必須です") }))
+    .min(1, "最低1つのスキルを入力してください"),
   annualSalary: z.number().optional(),
   purpose: z.string().optional(),
-})
+});
 
 export function HomeTemplate() {
   const form = useForm<z.infer<typeof formSchema>>({
