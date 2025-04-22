@@ -13,9 +13,9 @@ import { supabase } from "@/lib/supabase"
 
 const formSchema = z.object({
   username: z.string().min(2).max(50),
-  age: z.number().min(18).max(60).optional(),
-  yearsOfExperience: z.number().optional(),
-  skills: z.array(z.object({ name: z.string().optional() })),
+  age: z.number().min(18).max(60),
+  yearsOfExperience: z.number(),
+  skills: z.array(z.object({ name: z.string() })),
   annualSalary: z.number().optional(),
   purpose: z.string().optional(),
 })
