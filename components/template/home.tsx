@@ -110,7 +110,7 @@ export function HomeTemplate() {
                 <FormItem>
                   <FormLabel>名前<span className="text-red-600 font-bold">必須</span></FormLabel>
                   <FormControl>
-                    <Input placeholder="Your name" {...field} />
+                    <Input placeholder="Your name" {...field} required />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -123,7 +123,7 @@ export function HomeTemplate() {
               name="age"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>年齢</FormLabel>
+                  <FormLabel>年齢<span className="text-red-600 font-bold">必須</span></FormLabel>
                   <FormControl>
                     <Input 
                       type="text"
@@ -136,6 +136,7 @@ export function HomeTemplate() {
                         }
                       }}
                       pattern="[0-9]*"
+                      required
                     />
                   </FormControl>
                   <FormMessage />
@@ -149,7 +150,7 @@ export function HomeTemplate() {
               name="yearsOfExperience"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>経験</FormLabel>
+                  <FormLabel>経験<span className="text-red-600 font-bold">必須</span></FormLabel>
                   <FormControl>
                   <Input 
                       type="text"
@@ -162,6 +163,7 @@ export function HomeTemplate() {
                         }
                       }}
                       pattern="[0-9]*"
+                      required
                     />
                   </FormControl>
                   <FormMessage />
@@ -171,13 +173,14 @@ export function HomeTemplate() {
 
             {/* Skills */}
             <div>
-              <Label>スキル</Label>
+              <Label>スキル<span className="text-red-600 font-bold">必須</span></Label>
               <div className="space-y-2 mt-2">
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex items-center gap-2">
                     <Input
                       {...form.register(`skills.${index}.name`)}
                       placeholder={`Skill #${index + 1}`}
+                      required
                     />
                     <Button type="button" variant="destructive" onClick={() => remove(index)}>
                       削除
