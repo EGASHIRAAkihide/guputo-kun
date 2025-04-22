@@ -12,25 +12,25 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { supabase } from "@/lib/supabase"
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
-  age: z.number().min(18).max(60),
-  yearsOfExperience: z.number().min(1), // ← 1年以上
+  username: z.string().min(2, "名前は2文字以上で入力してください").max(50, "名前は50文字以内で入力してください"),
+  age: z.number({ invalid_type_error: "年齢は数値で入力してください" }).min(18, "18歳以上のみ").max(60, "60歳以下のみ"),
+  yearsOfExperience: z.number({ invalid_type_error: "経験年数は数値で入力してください" }).min(1, "経験年数は1年以上が必要です"),
   skills: z
     .array(z.object({ name: z.string().min(1, "スキル名は必須です") }))
     .min(1, "最低1つのスキルを入力してください"),
-  annualSalary: z.number().optional(),
+  annualSalary: z.number({ invalid_type_error: "年収は数値で入力してください" }).optional(),
   purpose: z.string().optional(),
-});
+})
 
 export function HomeTemplate() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: "",
-      age: 0,
-      yearsOfExperience: 0,
+      age: undefined,
+      yearsOfExperience: undefined,
       skills: [{ name: "" }],
-      annualSalary: 0,
+      annualSalary: undefined,
       purpose: "",
     },
   })
@@ -42,7 +42,6 @@ export function HomeTemplate() {
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      // 1. form_submissions に投稿（select() で ID を取得）
       const { data: formData, error: formError } = await supabase
         .from('form_submissions')
         .insert([{
@@ -52,33 +51,33 @@ export function HomeTemplate() {
           annual_salary: data.annualSalary,
           purpose: data.purpose
         }])
-        .select() // ← formData[0].id を取得
-  
+        .select()
+
       if (formError || !formData || formData.length === 0) {
         console.error("❌ form_submissions error:", formError?.message)
         alert("データ保存に失敗しました（基本情報）")
         return
       }
-  
+
       const formId = formData[0].id
-  
+
       const skillInserts = data.skills.map(skill => ({
         form_id: formId,
         name: skill.name
       }))
-  
+
       const { error: skillsError } = await supabase
         .from('skills')
         .insert(skillInserts)
-  
+
       if (skillsError) {
         console.error("❌ skills error:", skillsError.message)
         alert("データ保存に失敗しました（スキル）")
         return
       }
-  
+
       alert("キャリアマップ作成成功しました（beta）")
-  
+
     } catch (e) {
       console.error("❌ 予期せぬエラー:", e)
       alert("予期せぬエラーが発生しました")
@@ -102,7 +101,6 @@ export function HomeTemplate() {
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 max-w-xl mx-auto p-6">
-            {/* Username */}
             <FormField
               control={form.control}
               name="username"
@@ -110,14 +108,13 @@ export function HomeTemplate() {
                 <FormItem>
                   <FormLabel>名前<span className="text-red-600 font-bold">必須</span></FormLabel>
                   <FormControl>
-                    <Input placeholder="Your name" {...field} required />
+                    <Input placeholder="Your name" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
 
-            {/* Age */}
             <FormField
               control={form.control}
               name="age"
@@ -125,18 +122,17 @@ export function HomeTemplate() {
                 <FormItem>
                   <FormLabel>年齢<span className="text-red-600 font-bold">必須</span></FormLabel>
                   <FormControl>
-                    <Input 
+                    <Input
                       type="text"
                       inputMode="numeric"
                       {...field}
                       onChange={(e) => {
-                      const val = e.target.value;
+                        const val = e.target.value;
                         if (/^\d*$/.test(val)) {
-                          field.onChange(val === "" ? undefined : Number(val))
+                          field.onChange(val === "" ? undefined : Number(val));
                         }
                       }}
                       pattern="[0-9]*"
-                      required
                     />
                   </FormControl>
                   <FormMessage />
@@ -144,7 +140,6 @@ export function HomeTemplate() {
               )}
             />
 
-            {/* Years of Experience */}
             <FormField
               control={form.control}
               name="yearsOfExperience"
@@ -152,18 +147,17 @@ export function HomeTemplate() {
                 <FormItem>
                   <FormLabel>経験<span className="text-red-600 font-bold">必須</span></FormLabel>
                   <FormControl>
-                  <Input 
+                    <Input
                       type="text"
                       inputMode="numeric"
                       {...field}
                       onChange={(e) => {
-                      const val = e.target.value;
+                        const val = e.target.value;
                         if (/^\d*$/.test(val)) {
-                          field.onChange(val === "" ? undefined : Number(val))
+                          field.onChange(val === "" ? undefined : Number(val));
                         }
                       }}
                       pattern="[0-9]*"
-                      required
                     />
                   </FormControl>
                   <FormMessage />
@@ -180,7 +174,6 @@ export function HomeTemplate() {
                     <Input
                       {...form.register(`skills.${index}.name`)}
                       placeholder={`Skill #${index + 1}`}
-                      required
                     />
                     <Button type="button" variant="destructive" onClick={() => remove(index)}>
                       削除
@@ -193,7 +186,6 @@ export function HomeTemplate() {
               </div>
             </div>
 
-            {/* Annual Salary */}
             <FormField
               control={form.control}
               name="annualSalary"
@@ -201,14 +193,14 @@ export function HomeTemplate() {
                 <FormItem>
                   <FormLabel>年収</FormLabel>
                   <FormControl>
-                    <Input 
+                    <Input
                       type="text"
                       inputMode="numeric"
                       {...field}
                       onChange={(e) => {
-                      const val = e.target.value;
+                        const val = e.target.value;
                         if (/^\d*$/.test(val)) {
-                          field.onChange(val === "" ? undefined : Number(val))
+                          field.onChange(val === "" ? undefined : Number(val));
                         }
                       }}
                       pattern="[0-9]*"
@@ -219,7 +211,6 @@ export function HomeTemplate() {
               )}
             />
 
-            {/* Purpose */}
             <FormField
               control={form.control}
               name="purpose"
@@ -244,7 +235,6 @@ export function HomeTemplate() {
               )}
             />
 
-            {/* Submit */}
             <Button type="submit" className="w-full">
               キャリアパスマップを作成する
             </Button>
