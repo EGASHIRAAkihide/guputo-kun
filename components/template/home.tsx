@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { z } from "zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -166,25 +165,48 @@ export function HomeTemplate() {
             />
 
             {/* Skills */}
-            <div>
-              <Label>スキル<span className="text-red-600 font-bold">必須</span></Label>
-              <div className="space-y-2 mt-2">
-                {fields.map((field, index) => (
-                  <div key={field.id} className="flex items-center gap-2">
-                    <Input
-                      {...form.register(`skills.${index}.name`)}
-                      placeholder={`Skill #${index + 1}`}
-                    />
-                    <Button type="button" variant="destructive" onClick={() => remove(index)}>
-                      削除
-                    </Button>
-                  </div>
-                ))}
-                <Button type="button" variant="outline" onClick={() => append({ name: "" })}>
-                  + 追加
-                </Button>
-              </div>
-            </div>
+            <FormField
+  control={form.control}
+  name="skills"
+  render={() => (
+    <FormItem>
+      <FormLabel>スキル<span className="text-red-600 font-bold">必須</span></FormLabel>
+
+      <div className="space-y-2 mt-2">
+        {fields.map((field, index) => (
+          <div key={field.id} className="flex items-center gap-2">
+            <FormField
+              control={form.control}
+              name={`skills.${index}.name`}
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormControl>
+                    <Input {...field} placeholder={`Skill #${index + 1}`} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="button" variant="destructive" onClick={() => remove(index)}>
+              削除
+            </Button>
+          </div>
+        ))}
+      </div>
+
+      <Button type="button" variant="outline" onClick={() => append({ name: "" })} className="mt-2">
+        + 追加
+      </Button>
+
+      {/* 配列自体のエラーメッセージ（skills[]が空） */}
+      {form.formState.errors.skills && typeof form.formState.errors.skills.message === 'string' && (
+        <p className="text-sm font-medium text-destructive">
+          {form.formState.errors.skills.message}
+        </p>
+      )}
+    </FormItem>
+  )}
+/>
 
             <FormField
               control={form.control}
